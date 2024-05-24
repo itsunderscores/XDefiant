@@ -17,7 +17,6 @@ bool isr3d(BYTE red, BYTE green, BYTE blue) {
 typedef int(*pDD_btn)(int btn);
 pDD_btn      DD_btn;          // Mouse button
 
-//Had this for testing to see where the fuck it was checking for the pixels lol
 void DrawYellowCircle(int x, int y, int radius) {
     HDC hdc = GetDC(NULL);
     HPEN hPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 0)); // Yellow color
@@ -75,7 +74,7 @@ int main()
             }
             else {
                 boxSize = arsize;
-                distY = std::uniform_int_distribution<>(-100, -50); // Update the range
+                distY = std::uniform_int_distribution<>(-100, -45); // Update the range
                 cout << "[-] AR Mode\n";
             }
             // Debounce the button press
@@ -141,8 +140,10 @@ int main()
             DeleteDC(hdcMem);
             ReleaseDC(NULL, hdcScreen);
 
-            std::uniform_int_distribution<> dist1{ 10, 30 };
-            std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
+            //std::uniform_int_distribution<> dist1{ 10, 30 };
+            //std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
         }
+        std::uniform_int_distribution<> dist1{ 10, 20 };
+        std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
     }
 }
