@@ -100,7 +100,7 @@ int main()
             BitBlt(hdcMem, 0, 0, boxSize, boxSize, hdcScreen, centerX - boxSize / 2, centerY - boxSize / 2 + offsetY, SRCCOPY);
 
             // Draw a yellow circle to indicate the active area
-            DrawYellowCircle(centerX, centerY + offsetY, boxSize / 2);
+            //DrawYellowCircle(centerX, centerY + offsetY, boxSize / 2);
 
             // Check pixels in the captured box
             int similarColorPixelCount = 0;
