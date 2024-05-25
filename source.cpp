@@ -10,8 +10,16 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-bool isr3d(BYTE red, BYTE green, BYTE blue) {
-    return red > 200 && green < 100 && blue < 100;
+bool isSimilarColor(BYTE red, BYTE green, BYTE blue) {
+    // Hex code #FFF464 corresponds to RGB(255, 244, 100)
+    const BYTE targetRed = 255;
+    const BYTE targetGreen = 244;
+    const BYTE targetBlue = 100;
+    const BYTE tolerance = 40; // Adjust tolerance as needed
+
+    return (abs(red - targetRed) <= tolerance) &&
+        (abs(green - targetGreen) <= tolerance) &&
+        (abs(blue - targetBlue) <= tolerance);
 }
 
 typedef int(*pDD_btn)(int btn);
@@ -19,7 +27,7 @@ pDD_btn      DD_btn;          // Mouse button
 
 void DrawYellowCircle(int x, int y, int radius) {
     HDC hdc = GetDC(NULL);
-    HPEN hPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 0)); // Yellow color
+    HPEN hPen = CreatePen(PS_SOLID, 2, RGB(0, 0, 255)); // Blue color
     HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
     SelectObject(hdc, hPen);
     SelectObject(hdc, hBrush);
@@ -43,7 +51,7 @@ int main()
     int centerX = GetSystemMetrics(SM_CXSCREEN) / 2;
     int centerY = GetSystemMetrics(SM_CYSCREEN) / 2 - 10;
     int boxSize = 50; // Initial box size
-    int requiredRedPixels = 5; // Adjust the threshold as needed
+    int requiredYellowPixels = 5; // Adjust the threshold as needed
 
     // Load Chinese Mouse Driver
     HMODULE hDll = LoadLibraryW(L"3jkbnhhjkb.dll");    // App x64
@@ -95,7 +103,7 @@ int main()
             DrawYellowCircle(centerX, centerY + offsetY, boxSize / 2);
 
             // Check pixels in the captured box
-            int redPixelCount = 0;
+            int similarColorPixelCount = 0;
             for (int x = 0; x < boxSize; ++x) {
                 for (int y = 0; y < boxSize; ++y) {
                     COLORREF pixelColor = GetPixel(hdcMem, x, y);
@@ -103,20 +111,20 @@ int main()
                     BYTE green = GetGValue(pixelColor);
                     BYTE blue = GetBValue(pixelColor);
 
-                    if (isr3d(red, green, blue)) {
-                        redPixelCount++;
-                        if (redPixelCount >= requiredRedPixels) {
+                    if (isSimilarColor(red, green, blue)) {
+                        similarColorPixelCount++;
+                        if (similarColorPixelCount >= requiredYellowPixels) {
                             break;
                         }
                     }
                 }
-                if (redPixelCount >= requiredRedPixels) {
+                if (similarColorPixelCount >= requiredYellowPixels) {
                     break;
                 }
             }
 
-            // If the required number of red pixels is detected, simulate a left mouse button click
-            if (redPixelCount >= requiredRedPixels) {
+            // If the required number of similar color pixels is detected, simulate a left mouse button click
+            if (similarColorPixelCount >= requiredYellowPixels) {
                 DD_btn(1);
                 //cout << "[+] Shoot";
 
@@ -143,7 +151,7 @@ int main()
             //std::uniform_int_distribution<> dist1{ 10, 30 };
             //std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
         }
-        std::uniform_int_distribution<> dist1{ 10, 20 };
-        std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
+        //std::uniform_int_distribution<> dist1{ 10, 20 };
+        //std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
     }
 }
