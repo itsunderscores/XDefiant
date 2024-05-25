@@ -4,3 +4,5 @@
 <b><u>How to Use:</u></b><br>
 * M4 (Holding) enables the triggerbot<br>
 * M5 Switches Modes (AR and Sniper Mode)
+<hr>
+Compile as Console Application in C++
