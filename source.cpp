@@ -77,13 +77,13 @@ int main()
             toggleBoxSize = !toggleBoxSize;
             if (toggleBoxSize) {
                 boxSize = snipersize;
-                distY = std::uniform_int_distribution<>(-200, 10); // Update the range
-                cout << "[-] Sniper Mode\n";
+                distY = std::uniform_int_distribution<>(-200, 100); // Update the range
+                cout << "[-] Changed Mode: Sniper\n";
             }
             else {
                 boxSize = arsize;
                 distY = std::uniform_int_distribution<>(-100, -45); // Update the range
-                cout << "[-] AR Mode\n";
+                cout << "[-] Changed Mode: AR\n";
             }
             // Debounce the button press
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -125,8 +125,9 @@ int main()
 
             // If the required number of similar color pixels is detected, simulate a left mouse button click
             if (similarColorPixelCount >= requiredYellowPixels) {
+            //if(1 == 1) {
                 DD_btn(1);
-                //cout << "[+] Shoot";
+                cout << "[>] Shoot";
 
                 std::uniform_int_distribution<> dist{ 30, 90 };
                 std::this_thread::sleep_for(std::chrono::milliseconds{ dist(eng) });
@@ -151,7 +152,7 @@ int main()
             //std::uniform_int_distribution<> dist1{ 10, 30 };
             //std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
         }
-        //std::uniform_int_distribution<> dist1{ 10, 20 };
-        //std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
+        std::uniform_int_distribution<> dist1{ 10, 20 };
+        std::this_thread::sleep_for(std::chrono::milliseconds{ dist1(eng) });
     }
 }
